@@ -18,8 +18,6 @@ servo1.enable()
 servo2.enable()
 servo3.enable()
 
-
-
 def pointtopoint(x1, y1, x2, y2, kp=0.25):
     dx = x2 - x1
     dy = y2 - y1
@@ -36,11 +34,13 @@ def omegas(vx,vy):
     w2 = (-0.5*vx - 0.866*vy)/r_w
     w3 = vx/r_w
     return (w1, w2, w3)
+
 def clamp(x, low = -1, high = 1):
     return low if x < low else high if x > high else x
+
 def omegatopulse(w,i):
     x = clamp(w/wmax)
-    return stop[i] + x * range[i]
+    return stop[i] - x * range[i]
 
 dt = 0.01
 rows = []
@@ -59,6 +59,7 @@ while dist >= 0.01:
     y += vy*dt
     t += dt
     time.sleep(dt)
+
 servo1.disable()
 servo2.disable()
 servo3.disable()
