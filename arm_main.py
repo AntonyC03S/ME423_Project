@@ -1,40 +1,86 @@
 import time
-import math
-from pimoroni import Button
 from servo import Servo, servo2040, ANGULAR
-from plasma import WS2812
 
 
-def coeff(theta, end, t):
-    a0 = theta
-    a1 = 0
-    a2 = theta*(-3/t**2) + end*(3/t**2)
-    a3 = theta*(2/t**3) + end*(-2/t**3)
-    return a0, a1, a2, a3
+base = Servo(servo2040.SERVO_4, ANGULAR)
+elbow = Servo(servo2040.SERVO_5, ANGULAR)
+gripper = Servo(servo2040.SERVO_6, ANGULAR)
 
-def cubic(t, a0, a1, a2, a3):
-    return a0 + a1*t + a2*t**2 + a3*t**3
 
-servo4 = Servo(servo2040.SERVO_4, ANGULAR)
-servo5 = Servo(servo2040.SERVO_5, ANGULAR)
+BASE_OFFSET = 0
+ELBOW_OFFSET = 0
+GRIPPER_OFFSET = 0
 
-servo4.enable()
-servo5.enable() 
+GRIP_OPEN = -20
+GRIP_CLOSE = -200
 
-theta4 = 0
-theta5 = 0
-end4 = 75
-end5 = 50
-a0 ,a1, a2, a3 = coeff(theta4, end4, 7)
-t = 0
-servo4.value(theta4)
-servo5.value(theta5)
+base.enable()
+elbow.enable()
+gripper.enable()
+
 time.sleep(1)
 
-while t <= 7:
-    theta4 = cubic(t, a0, a1, a2, a3)
-    servo4.value(theta4)
-    t += 0.1
-    time.sleep(0.1)
+
+def move_base(angle):
+    base.value(angle)
+
+def move_elbow(angle):
+    elbow.value(angle)
+
+def open_gripper():
+    gripper.value(GRIP_OPEN)
+
+def close_gripper():
+    gripper.value(GRIP_CLOSE)
 
 
+def move_arm(base_angle, elbow_angle):
+    move_base(base_angle)
+    move_elbow(elbow_angle)
+
+
+def home():
+    move_arm(0, 0)
+    open_gripper()
+
+def pick(base_angle, elbow_angle):
+
+    open_gripper()
+    time.sleep(1)
+
+    move_arm(base_angle, elbow_angle)
+    time.sleep(1)
+
+    close_gripper()
+    time.sleep(4)
+
+    move_elbow(elbow_angle + 20)
+    time.sleep(1)
+
+
+def place(base_angle, elbow_angle):
+
+    move_arm(base_angle, elbow_angle)
+    time.sleep(1)
+
+    open_gripper()
+    time.sleep(1)
+
+
+# home()
+
+time.sleep(2)
+
+
+gripper.value(-200)
+print("Gripper value set to 100")
+
+# pick(45, 0)
+
+# time.sleep(2)
+
+# place(-70, -15)
+
+# time.sleep(2)
+
+# home()
