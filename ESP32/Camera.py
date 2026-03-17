@@ -9,7 +9,7 @@ def open_any_camera(max_index=10):
                 print("Opened camera index:", i, frame.shape)
                 return cap
             cap.release()
-    raise RuntimeError("No camera opened. On Windows your iPhone won't appear unless you install Camo/EpocCam or similar.")
+    raise RuntimeError("No camera opened. Your iPhone won't appear unless you install Camo/EpocCam or similar.")
 
 cap = open_any_camera()
 while True:

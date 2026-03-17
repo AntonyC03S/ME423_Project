@@ -1,5 +1,5 @@
 import time
-from servo import Servo, servo2040
+from servo import Servo, servo2040        # type: ignore
 
 
 class Arm():
