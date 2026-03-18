@@ -20,3 +20,4 @@ def cal_wheel_speed(Vx, Vy, W):
     return w1, w2, w3 
 
 print(cal_wheel_speed(0,1,0))
+print(cal_wheel_speed(1,0,0))

@@ -16,7 +16,7 @@ class Arm():
 
 
     def close_gripper(self):
-        self.gripper.value(-50)
+        self.gripper.value(-60)
 
     def open_gripper(self):
         self.gripper.value(10)
@@ -62,6 +62,7 @@ class Drivebase():
         self.kp = 1
         self.ki = 0
         self.kd = 0
+        self.drive_stop()
         time.sleep(1)
 
     def set_kp(self, kp):
@@ -137,3 +138,12 @@ class Drivebase():
     def omegatopulse(self,w, i):
         x = self.clamp(w / Drivebase.wmax, -1.0, 1.0)
         return int(Drivebase.stop[i] - x * Drivebase.pulse_range[i])
+    
+    def drive_y(self, speed, speed2):
+        self.servos_speed(-1*speed,1*speed,0*speed2)
+
+    def drive_x(self,speed):
+        self.servos_speed(-2*speed,1*speed,1*speed)
+
+    def rotate(self,speed):
+        self.servos_speed(1*speed,1*speed,1*speed)
